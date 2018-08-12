@@ -1,22 +1,5 @@
 version: "3.1"
 services:
-
-    memcached:
-      image: memcached:alpine
-      container_name: test-memcached
-
-    mariadb:
-      image: mariadb:10.1
-      container_name: test-mariadb
-      working_dir: /application
-      volumes:
-        - .:/application
-      environment:
-        - MYSQL_DATABASE=myqpp
-        - MYSQL_USER=root
-      ports:
-        - "10263:3306"
-
     gateway: 
       image: nginx:alpine
       container_name: gateway
@@ -26,8 +9,6 @@ services:
           - ./gateway/conf/nginx/:/etc/nginx/conf.d/
       ports:
        - "80:80"
-
-
     express1:
       build: ./express1/.
       container_name: express1
