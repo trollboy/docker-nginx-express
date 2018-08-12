@@ -1,0 +1,60 @@
+version: "3.1"
+services:
+
+    memcached:
+      image: memcached:alpine
+      container_name: test-memcached
+
+    mariadb:
+      image: mariadb:10.1
+      container_name: test-mariadb
+      working_dir: /application
+      volumes:
+        - .:/application
+      environment:
+        - MYSQL_DATABASE=myqpp
+        - MYSQL_USER=root
+      ports:
+        - "10263:3306"
+
+    gateway: 
+      image: nginx:alpine
+      container_name: gateway
+      working_dir: /app
+      volumes:
+          - ./gateway/www:/usr/share/nginx/html
+          - ./gateway/conf/nginx/:/etc/nginx/conf.d/
+      ports:
+       - "80:80"
+
+
+    express1:
+      build: ./express1/.
+      container_name: express1
+      working_dir: /application
+      environment:
+          - INSTANCE=express1
+      volumes:
+          - ./express1:/app
+      ports:
+       - "8080:80" 
+    express2:
+      build: ./express2/.
+      container_name: express2
+      working_dir: /application
+      environment:
+          - INSTANCE=express2
+      volumes:
+          - ./express2:/app
+      ports:
+       - "8081:80" 
+    express3:
+      build: ./express2/.
+      container_name: express3
+      working_dir: /application
+      environment:
+          - INSTANCE=express3
+      volumes:
+          - ./express2:/app
+      ports:
+       - "8082:80" 
